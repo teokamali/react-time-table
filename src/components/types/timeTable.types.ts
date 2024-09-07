@@ -1,7 +1,7 @@
 import { Moment } from "moment";
-import { CSSProperties } from "react";
+import { FC, ReactNode } from "react";
+import { BaseProps } from "./global";
 
-export type TimeSlot = "morning" | "afternoon" | "evening";
 export type IDate = { day: IWeekDay; time: string; timestamp: string };
 export type Day =
    | "saturday"
@@ -11,22 +11,12 @@ export type Day =
    | "wednesday"
    | "thursday"
    | "friday";
+
 export type IWeekDay = {
    dayName: Day;
    dayDate: string;
    fullDate: string;
 };
-
-export type AvailabilityStatus =
-   | "fully-available"
-   | "partially-available"
-   | "not-available";
-
-export interface Availability {
-   day: Day;
-   timeSlot: TimeSlot;
-   status: AvailabilityStatus;
-}
 
 export type IHour =
    | "1"
@@ -54,6 +44,16 @@ export type IHour =
    | "23"
    | "24";
 
+// Create a context to share state between compound components
+export interface TimeTableContextProps {
+   selectedSlots: IDate[];
+   handleSlotClick: (day: IWeekDay, time: string, timestamp: string) => void;
+   isSlotSelected: (timestamp: string) => boolean;
+   isSlotDisabled: (timestamp: string) => boolean;
+   days: IWeekDay[];
+   timeSlots: string[];
+}
+
 export interface ITimeTable {
    maxSlots?: number;
    disabledSlots?: Array<string>;
@@ -62,8 +62,17 @@ export interface ITimeTable {
    showDates?: boolean;
    onChange?: (selectedSlots: Array<{ day: IWeekDay; time: string }>) => void;
    startDate?: Moment | number; // moment will get a start date and number will add as an offset from now
-   // classnames
-   // Container
-   containerClassName?: string;
-   containerStyles?: CSSProperties;
+   children?:
+      | ((context: { timeSlots: string[]; days: IWeekDay[] }) => ReactNode)
+      | ReactNode;
 }
+
+export type ContainerProps = FC<{
+   children: (context: TimeTableContextProps | null) => ReactNode;
+}>;
+
+export type TimeTableType = FC<ITimeTable> & {
+   Column: BaseProps;
+   Day: BaseProps;
+   Slot: BaseProps<{ day: IWeekDay; time: string; timestamp: string }>;
+};

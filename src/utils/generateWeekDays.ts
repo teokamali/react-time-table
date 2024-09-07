@@ -1,5 +1,5 @@
 import moment, { Moment } from "moment";
-import { Day, IWeekDay } from "../components/timeTable.types";
+import { Day, IWeekDay } from "../components/types/timeTable.types";
 
 export const generateWeekDays = (input: Moment | number) => {
    const days: IWeekDay[] = [];
