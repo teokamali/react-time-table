@@ -67,6 +67,15 @@ export interface ITimeTable {
       | ReactNode;
 }
 
+export type SlotType = FC<{
+   timestamp: string;
+   day: IWeekDay;
+   time: string;
+   children?:
+      | ((context: { isDisabled: boolean; isSelected: boolean }) => ReactNode)
+      | ReactNode;
+}>;
+
 export type ContainerProps = FC<{
    children: (context: TimeTableContextProps | null) => ReactNode;
 }>;
@@ -74,5 +83,5 @@ export type ContainerProps = FC<{
 export type TimeTableType = FC<ITimeTable> & {
    Column: BaseProps;
    Day: BaseProps;
-   Slot: BaseProps<{ day: IWeekDay; time: string; timestamp: string }>;
+   Slot: SlotType;
 };

@@ -18,7 +18,6 @@
    background-color: #1976d2;
    height: 52px;
    margin-top: 1px;
-
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -53,12 +52,15 @@
 .slot {
    height: 52px;
    margin-top: 1px;
-   background-color: red;
+   background-color: #ebe7e7;
    cursor: pointer;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 
 .slotDisabled {
-   background-color: #f0f0f0;
+   background-color: red;
    cursor: not-allowed;
 }
 

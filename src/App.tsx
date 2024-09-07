@@ -1,4 +1,5 @@
 import TimeTable from "./components/TimeTable/TimeTable";
+import "./styles/timeTable.css";
 
 function App() {
    return (
@@ -13,60 +14,64 @@ function App() {
          >
             {({ timeSlots, days }) => (
                <div
-                  style={{
-                     display: "flex",
-                     width: "100%",
-                     gap: "20px",
-                  }}
+                  className={"container"} // Apply the grid container class
                >
                   <TimeTable.Column>
-                     <span>Time/Day</span>
+                     <span className={"whiteBox"}>Time/Day</span>
                      {timeSlots.map((time) => (
-                        <TimeTable.Day key={time}>{time}</TimeTable.Day>
+                        <TimeTable.Day key={time}>
+                           <div className={"timeSlot"}>
+                              <span className={"timeSlotText"}>{time}</span>
+                           </div>
+                        </TimeTable.Day>
                      ))}
                   </TimeTable.Column>
-                  <section
-                     style={{
-                        flexGrow: "1",
-                        display: "grid",
-                        gridTemplateColumns: "repeat(7, 1fr)",
-                        gridTemplateRows: "repeat(3, 50px)",
-                        gridColumnGap: "2px",
-                        gridRowGap: "2px",
-                     }}
-                  >
-                     {days.map((day) => (
-                        <TimeTable.Column key={day.fullDate}>
-                           <div
-                              style={{
-                                 display: "flex",
-                                 flexDirection: "column",
-                                 gap: "5px",
-                              }}
-                           >
-                              <div>
-                                 <span>{day.dayName}</span>
-                                 <br />
-                                 <span>{day.dayDate}</span>
-                              </div>
 
-                              {timeSlots.map((slot) => {
-                                 const timestamp = `${day.fullDate}T${slot}`;
-                                 return (
-                                    <TimeTable.Slot
-                                       key={timestamp}
-                                       timestamp={timestamp}
-                                       day={day}
-                                       time={slot}
-                                    >
-                                       {slot}
-                                    </TimeTable.Slot>
-                                 );
-                              })}
+                  {days.map((day) => (
+                     <TimeTable.Column key={day.fullDate}>
+                        <div>
+                           <div className={"dayBox"}>
+                              <span className="dayText dayTextVisibleSm">
+                                 {day.dayName}
+                              </span>
+                              <br />
+                              <span className="dayText dayTextHiddenSm">
+                                 {day.dayDate}
+                              </span>
                            </div>
-                        </TimeTable.Column>
-                     ))}
-                  </section>
+
+                           {timeSlots.map((slot) => {
+                              const timestamp = `${day.fullDate}T${slot}`;
+                              return (
+                                 <TimeTable.Slot
+                                    key={timestamp}
+                                    timestamp={timestamp}
+                                    day={day}
+                                    time={slot}
+                                 >
+                                    {({ isDisabled, isSelected }) => {
+                                       return (
+                                          <>
+                                             <div
+                                                className={`slot ${
+                                                   isDisabled
+                                                      ? "slotDisabled"
+                                                      : isSelected
+                                                        ? "slotSelected"
+                                                        : ""
+                                                }`}
+                                             >
+                                                {slot}
+                                             </div>
+                                          </>
+                                       );
+                                    }}
+                                 </TimeTable.Slot>
+                              );
+                           })}
+                        </div>
+                     </TimeTable.Column>
+                  ))}
                </div>
             )}
          </TimeTable>

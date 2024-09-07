@@ -1,7 +1,8 @@
-import { FC, useState, createContext, useContext, ReactNode } from "react";
+import { useState, createContext, useContext } from "react";
 import {
    IDate,
    IWeekDay,
+   SlotType,
    TimeTableContextProps,
    TimeTableType,
 } from "../types/timeTable.types";
@@ -82,12 +83,7 @@ const Day: BaseProps = ({ children }) => {
    return <div>{children}</div>;
 };
 
-const Slot: FC<{
-   timestamp: string;
-   day: IWeekDay;
-   time: string;
-   children?: ReactNode;
-}> = ({ timestamp, day, time, children }) => {
+const Slot: SlotType = ({ timestamp, day, time, children }) => {
    const context = useContext(TimeTableContext);
    if (!context) {
       throw new Error("Slot must be used within a TimeTable component");
@@ -98,18 +94,10 @@ const Slot: FC<{
    const isSelected = isSlotSelected(timestamp);
 
    return (
-      <div
-         onClick={() => !isDisabled && handleSlotClick(day, time, timestamp)}
-         style={{
-            backgroundColor: isDisabled
-               ? "gray"
-               : isSelected
-                 ? "green"
-                 : "white",
-            cursor: isDisabled ? "not-allowed" : "pointer",
-         }}
-      >
-         {children}
+      <div onClick={() => !isDisabled && handleSlotClick(day, time, timestamp)}>
+         {typeof children === "function"
+            ? children({ isDisabled, isSelected })
+            : children}
       </div>
    );
 };
