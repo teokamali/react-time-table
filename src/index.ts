@@ -1,2 +1,2 @@
-// export { default as ImageLoader } from "./components/Image";
-// export type { IImageProps } from "./components/Image.types";
+export { default as TimeTable } from "./components/TimeTable/TimeTable";
+export * from "./components/types/timeTable.types";
