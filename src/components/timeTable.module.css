@@ -1,0 +1,67 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+}
+
+.whiteBox {
+  background-color: white;
+  height: 50px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeSlot {
+  background-color: #1976d2;
+  height: 52px;
+  margin-top: 1px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeSlotText {
+  font-weight: 700;
+  color: white;
+}
+
+.dayBox {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dayText {
+  color: #757575; /* grey.600 */
+  font-weight: 500;
+}
+
+.dayTextHiddenSm {
+  display: none;
+}
+
+.dayTextVisibleSm {
+  display: inline;
+}
+
+.slot {
+  height: 52px;
+  margin-top: 1px;
+  background-color: red;
+  cursor: pointer;
+}
+
+.slotDisabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.slotSelected {
+  background-color: #bbdefb;
+}
