@@ -1,3 +1,4 @@
+import { Moment } from "moment";
 import { CSSProperties } from "react";
 
 export type TimeSlot = "morning" | "afternoon" | "evening";
@@ -60,6 +61,7 @@ export interface ITimeTable {
   cellDuration?: number; // Duration of each class in minutes
   showDates?: boolean;
   onChange?: (selectedSlots: Array<{ day: IWeekDay; time: string }>) => void;
+  startDate?: Moment | number; // moment will get a start date and number will add as an offset from now
   // classnames
   // Container
   containerClassName?: string;

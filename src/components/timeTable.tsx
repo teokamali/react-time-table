@@ -1,7 +1,9 @@
 import { FC, useState } from "react";
-import { Day, IDate, ITimeTable, IWeekDay } from "./timeTable.types";
+import { IDate, ITimeTable, IWeekDay } from "./timeTable.types";
 import styles from "./timeTable.module.css";
-import moment from "moment";
+import { generateTimeSlots } from "../utils/generateTimeSlots";
+import { generateWeekDays } from "../utils/generateWeekDays";
+
 const TimeTable: FC<ITimeTable> = ({
   maxSlots = 9999,
   disabledSlots = [],
@@ -10,28 +12,15 @@ const TimeTable: FC<ITimeTable> = ({
   onChange = () => {},
   showDates = false,
   containerClassName,
+  startDate = 0,
   containerStyles,
 }) => {
-  const generateWeekDays = (offset: number) => {
-    const days: IWeekDay[] = [];
-    const currentWeek = moment().add(offset, "days");
-
-    for (let i = 0; i < 7; i++) {
-      days.push({
-        dayName: currentWeek.format("dddd") as Day,
-        dayDate: currentWeek.format("MMM DD"),
-        fullDate: currentWeek.format("YYYY-MM-DD"),
-      });
-      currentWeek.add(1, "day");
-    }
-    return days;
-  };
-  const days = generateWeekDays(0);
-
   const [selectedSlots, setSelectedSlots] = useState<IDate[]>([]);
 
   const isSlotSelected = (timestamp: string) =>
     selectedSlots.some((slot) => slot.timestamp === timestamp);
+  const isSlotDisabled = (timestamp: string) =>
+    disabledSlots.some((slot) => slot === timestamp);
 
   const handleSlotClick = (day: IWeekDay, time: string, timestamp: string) => {
     const isSelected = isSlotSelected(timestamp);
@@ -49,35 +38,13 @@ const TimeTable: FC<ITimeTable> = ({
     }
   };
 
-  const isSlotDisabled = (timestamp: string) =>
-    disabledSlots.some((slot) => slot === timestamp);
-
-  const generateTimeSlots = (
-    startHour: string,
-    endHour: string,
-    duration: number
-  ): string[] => {
-    const slots: string[] = [];
-    let currentTime = +startHour * 60; // Convert start hour to minutes
-    while (currentTime <= +endHour * 60) {
-      // Convert end hour to minutes
-      const hours = Math.floor(currentTime / 60);
-      const minutes = currentTime % 60;
-      const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
-        .toString()
-        .padStart(2, "0")}`;
-      slots.push(formattedTime);
-      currentTime += duration; // Increment by the class duration
-    }
-
-    return slots;
-  };
-
   const timeSlots = generateTimeSlots(
     availableTimeRange[0],
     availableTimeRange[1],
     cellDuration
   );
+
+  const days = generateWeekDays(startDate);
 
   return (
     <div
